@@ -1,9 +1,13 @@
 package jlmartin.es.romanepatrimony;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,9 +17,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+
+import jlmartin.es.romanepatrimony.entity.PatrimonioView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    //manejador para rellenar el recyclerView
+    private RecyclerView.LayoutManager layoutManager;
+    //List donde iran los objetos
+    private static RecyclerView recyclerView;
+    //array con los datos a mostrar
+    private static ArrayList<PatrimonioView> patrimonios;
+
+    private static RecyclerView.Adapter adapter;
+
+    static View.OnClickListener myOnClickListener;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +54,24 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        myOnClickListener = new MyOnClickListener(this);
 
+        recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setHasFixedSize(true);
+
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        patrimonios = new ArrayList<>();
+        for(int i=0;i<2;i++){
+            PatrimonioView view = new PatrimonioView();
+            view.setTitulo("Titulo "+i);
+            view.setDescripcion("Descripcion "+i);
+            patrimonios.add(view);
+        }
+
+        adapter = new CustomAdapter(patrimonios);
+        recyclerView.setAdapter(adapter);
 
     }
 
@@ -84,5 +122,20 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    //innerclass
+
+    private static class MyOnClickListener implements View.OnClickListener {
+
+        private final Context context;
+
+        private MyOnClickListener(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public void onClick(View v) {
+        }
     }
 }
