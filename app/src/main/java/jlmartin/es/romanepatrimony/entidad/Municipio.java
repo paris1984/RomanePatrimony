@@ -1,6 +1,7 @@
 package jlmartin.es.romanepatrimony.entidad;
 
 public class Municipio {
+    private int id;
     private String nombre;
     private Integer provincia_id;
     private Double latitud,longitud;

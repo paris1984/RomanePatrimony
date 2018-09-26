@@ -112,24 +112,26 @@ public class RomaneDbHelper extends SQLiteOpenHelper {
         List<Municipio> municipios = MunicipiosSqlCreateDbHelper.creation(inputStream);
         int count=0;
         for (Municipio municipio:municipios) {
-            ContentValues values = new ContentValues();
-            values.put(ContractSql.Municipio.COLUMNA_NOMBRE,municipio.getNombre());
-            values.put(ContractSql.Municipio.COLUMNA_PROVINCIA_ID,municipio.getProvincia_id());
-            values.put(ContractSql.Municipio.COLUMNA_LATITUD,municipio.getLatitud());
-            values.put(ContractSql.Municipio.COLUMNA_LONGITUD,municipio.getLongitud());
-            if(db.insert(ContractSql.Municipio.TABLA, null, values)!=-1){
+            ContentValues municipio1 = new ContentValues();
+            municipio1.put(ContractSql.Municipio.COLUMNA_NOMBRE,municipio.getNombre());
+            municipio1.put(ContractSql.Municipio.COLUMNA_PROVINCIA_ID,municipio.getProvincia_id());
+            municipio1.put(ContractSql.Municipio.COLUMNA_LATITUD,municipio.getLatitud());
+            municipio1.put(ContractSql.Municipio.COLUMNA_LONGITUD,municipio.getLongitud());
+            if(db.insert(ContractSql.Municipio.TABLA, null, municipio1)!=-1){
                 count++;
             }else{
                 System.err.println("Error al insertar:"+municipio);
             }
         }
-        // Create a new map of values, where column names are the keys
-        ContentValues values = new ContentValues();
-        //values.put(ContractSql.Actividad._ID, 1);
-        values.put(ContractSql.Actividad.COLUMNA_DESCRIPCION, "Actividad");
+        // datos tipos
+        ContentValues tipos1 = new ContentValues();
+        tipos1.put(ContractSql.Tipo.COLUMNA_DESCRIPCION, "Arqueológico");
+        db.insert(ContractSql.Tipo.TABLA, null, tipos1);
+        tipos1.put(ContractSql.Tipo.COLUMNA_DESCRIPCION, "Arqueológico - Arquitectónico");
+        db.insert(ContractSql.Tipo.TABLA, null, tipos1);
 
-        // Insert the new row, returning the primary key value of the new row
-        long newRowId = db.insert(ContractSql.Actividad.TABLA, null, values);
+        // datos patrimonio
+
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
