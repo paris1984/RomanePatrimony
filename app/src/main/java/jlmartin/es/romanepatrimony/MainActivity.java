@@ -1,6 +1,9 @@
 package jlmartin.es.romanepatrimony;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.provider.BaseColumns;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
@@ -22,6 +25,8 @@ import java.util.List;
 
 import jlmartin.es.romanepatrimony.adapter.CardViewAdapter;
 import jlmartin.es.romanepatrimony.entidad.PatrimonioResumen;
+import jlmartin.es.romanepatrimony.sql.ContractSql;
+import jlmartin.es.romanepatrimony.sql.RomaneDbHelper;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -29,6 +34,7 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView recyclerView;
     private CardViewAdapter cardViewAdapter;
     private List<PatrimonioResumen> patrimonios = new ArrayList<>();
+    private SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +51,10 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        RomaneDbHelper helper = new RomaneDbHelper(this);
+        db = helper.getReadableDatabase();
+
 
         recyclerView = findViewById(R.id.patrimonios);
         cardViewAdapter = new CardViewAdapter(patrimonios);
@@ -105,20 +115,45 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void rellenarDatos() {
-        PatrimonioResumen patrimonioResumen = new PatrimonioResumen(1000,"Complutum",R.drawable.complutum);//imagen 300*100
-        patrimonios.add(patrimonioResumen);
 
-        PatrimonioResumen patrimonioResumen1 = new PatrimonioResumen(2000,"La Alhambra",R.drawable.alhambra);
-        patrimonios.add(patrimonioResumen1);
+        String[] projection = {
+                BaseColumns._ID,
+                ContractSql.Patrimonio.COLUMNA_DENOMINACION};
 
-        PatrimonioResumen patrimonioResumen2 = new PatrimonioResumen(3000,"Merida",R.drawable.merida);
-        patrimonios.add(patrimonioResumen2);
 
-        PatrimonioResumen patrimonioResumen3 = new PatrimonioResumen(4000,"Carranque",R.drawable.carranque);
-        patrimonios.add(patrimonioResumen3);
+// How you want the results sorted in the resulting Cursor
+        String sortOrder =
+                ContractSql.Patrimonio.COLUMNA_DENOMINACION + " DESC";
 
-        PatrimonioResumen patrimonioResumen4 = new PatrimonioResumen(5000,"Roma",R.drawable.roma);
-        patrimonios.add(patrimonioResumen4);
+        Cursor cursor = db.query(
+                ContractSql.Patrimonio.TABLA,   // The table to query
+                projection,             // The array of columns to return (pass null to get all)
+                null,              // The columns for the WHERE clause
+                null,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                sortOrder               // The sort order
+        );
+
+        while(cursor.moveToNext()) {
+            String denominacion = cursor.getString(
+                    cursor.getColumnIndexOrThrow(ContractSql.Patrimonio.COLUMNA_DENOMINACION));
+            PatrimonioResumen patrimonioResumen = new PatrimonioResumen(1000, denominacion, R.drawable.complutum);//imagen 300*100
+            patrimonios.add(patrimonioResumen);
+        }
+        cursor.close();
+//
+//        PatrimonioResumen patrimonioResumen1 = new PatrimonioResumen(2000,"La Alhambra",R.drawable.alhambra);
+//        patrimonios.add(patrimonioResumen1);
+//
+//        PatrimonioResumen patrimonioResumen2 = new PatrimonioResumen(3000,"Merida",R.drawable.merida);
+//        patrimonios.add(patrimonioResumen2);
+//
+//        PatrimonioResumen patrimonioResumen3 = new PatrimonioResumen(4000,"Carranque",R.drawable.carranque);
+//        patrimonios.add(patrimonioResumen3);
+//
+//        PatrimonioResumen patrimonioResumen4 = new PatrimonioResumen(5000,"Roma",R.drawable.roma);
+//        patrimonios.add(patrimonioResumen4);
 
         cardViewAdapter.notifyDataSetChanged();
     }

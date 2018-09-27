@@ -4,8 +4,13 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+
 import java.io.InputStream;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import jlmartin.es.romanepatrimony.R;
 import jlmartin.es.romanepatrimony.entidad.Municipio;
@@ -100,6 +105,7 @@ public class RomaneDbHelper extends SQLiteOpenHelper {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_ACTIVIDAD);
         db.execSQL(SQL_CREATE_PERIODO_HISTORICO);
@@ -117,7 +123,7 @@ public class RomaneDbHelper extends SQLiteOpenHelper {
             municipio1.put(ContractSql.Municipio.COLUMNA_PROVINCIA_ID,municipio.getProvincia_id());
             municipio1.put(ContractSql.Municipio.COLUMNA_LATITUD,municipio.getLatitud());
             municipio1.put(ContractSql.Municipio.COLUMNA_LONGITUD,municipio.getLongitud());
-            if(db.insert(ContractSql.Municipio.TABLA, null, municipio1)!=-1){
+            if(municipio.setId(db.insert(ContractSql.Municipio.TABLA, null, municipio1))!=-1){
                 count++;
             }else{
                 System.err.println("Error al insertar:"+municipio);
@@ -126,14 +132,23 @@ public class RomaneDbHelper extends SQLiteOpenHelper {
         // datos tipos
         ContentValues tipos1 = new ContentValues();
         tipos1.put(ContractSql.Tipo.COLUMNA_DESCRIPCION, "Arqueológico");
-        db.insert(ContractSql.Tipo.TABLA, null, tipos1);
+        long arq1 = db.insert(ContractSql.Tipo.TABLA, null, tipos1);
         tipos1.put(ContractSql.Tipo.COLUMNA_DESCRIPCION, "Arqueológico - Arquitectónico");
-        db.insert(ContractSql.Tipo.TABLA, null, tipos1);
+        long arquitec2 = db.insert(ContractSql.Tipo.TABLA, null, tipos1);
 
         // datos patrimonio
+        ContentValues patrimonios1 = new ContentValues();
+        patrimonios1.put(ContractSql.Patrimonio.COLUMNA_DENOMINACION," Zona Arqueológica de Granada");
+        patrimonios1.put(ContractSql.Patrimonio.COLUMNA_CODTIPO,arq1);
+        Optional<Municipio> munic = municipios.stream().filter(municipio -> municipio.getNombre().equals("Granada")).findFirst();
+        patrimonios1.put(ContractSql.Patrimonio.COLUMNA_CODMUNICIPIO,munic.get().getId());
+        patrimonios1.put(ContractSql.Patrimonio.COLUMNA_DESCRIPCION, "Este yacimiento comprende el conjunto arqueológico monumental del barrio del Albaycin: ibero-romano e islámico, el recinto histórico y monumental de la Alhambra y el Generalife, el alfar romano de Cartuja, la necrópolis romana de Los Vergeles, la necrópolis ibero-romana de la Calle San Antón, la necrópolis argárica en el recinto del Ferial, el Maristán y el baño almohade del Colegio de las Mercedarias. Se trata de un conjunto arqueológico y monumental cuyos datos más antiguos son de época argárica.");
+        db.insert(ContractSql.Patrimonio.TABLA, null, patrimonios1);
+
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(SQL_DELETE_TIPOLOGIA_PATRIMONIO);
         db.execSQL(SQL_DELETE_PATRIMONIO);
@@ -144,6 +159,7 @@ public class RomaneDbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
     }
