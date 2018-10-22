@@ -9,6 +9,7 @@
 
     <TextView
         android:id="@+id/titulo_tv"
+        android:background="@drawable/edit_text_border"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
@@ -29,6 +30,7 @@
         android:id="@+id/otradenominacion_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/edit_text_border"
         android:text="Otra denominacion" />
 
     <ImageView
@@ -47,6 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/edit_text_border"
             android:text="Tipo" />
 
         <TextView
@@ -54,6 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/edit_text_border"
             android:text="Pertenece" />
     </LinearLayout>
 
@@ -66,17 +70,20 @@
         android:id="@+id/descripcion_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/edit_text_border"
         android:text="Descripcion" />
 
     <TextView
         android:id="@+id/bibliografia_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/edit_text_border"
         android:text="Bibliografia" />
 
     <TextView
         android:id="@+id/datos_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/edit_text_border"
         android:text="Datos historicos" />
 </LinearLayout>

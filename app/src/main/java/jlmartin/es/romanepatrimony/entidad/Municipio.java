@@ -6,6 +6,9 @@ public class Municipio {
     private Integer provincia_id;
     private Double latitud,longitud;
 
+    public Municipio() {
+    }
+
     public Municipio(String nombre, Integer provincia_id, Double latitud, Double longitud) {
         this.nombre = nombre;
         this.provincia_id = provincia_id;

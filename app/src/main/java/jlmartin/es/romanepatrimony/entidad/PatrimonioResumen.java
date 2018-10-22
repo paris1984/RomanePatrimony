@@ -5,11 +5,20 @@ public class PatrimonioResumen {
     private int id;
     private String titulo;
     private int imagen;
+    private PatrimonioDescripcionResumen descripcion;
 
     public PatrimonioResumen(int id,String titulo, int imagen) {
         this.titulo = titulo;
         this.imagen = imagen;
         this.id = id;
+    }
+
+    public PatrimonioDescripcionResumen getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(PatrimonioDescripcionResumen descripcion) {
+        this.descripcion = descripcion;
     }
 
     public String getTitulo() {

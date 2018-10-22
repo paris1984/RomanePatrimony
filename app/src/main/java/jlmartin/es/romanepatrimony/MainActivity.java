@@ -15,11 +15,13 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import jlmartin.es.romanepatrimony.adapter.CardViewAdapter;
+import jlmartin.es.romanepatrimony.entidad.PatrimonioDescripcionResumen;
 import jlmartin.es.romanepatrimony.entidad.PatrimonioResumen;
 import jlmartin.es.romanepatrimony.sql.ContractSql;
 import jlmartin.es.romanepatrimony.sql.RomaneDbHelper;
@@ -32,10 +34,16 @@ public class MainActivity extends AppCompatActivity
     private List<PatrimonioResumen> patrimonios = new ArrayList<>();
     private SQLiteDatabase db;
 
+    //objetos del detalle
+    private TextView titulo;
+    private TextView otraDen;
+    private TextView descripcion;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -114,7 +122,11 @@ public class MainActivity extends AppCompatActivity
 
         String[] projection = {
                 BaseColumns._ID,
-                ContractSql.Patrimonio.COLUMNA_DENOMINACION};
+                ContractSql.Patrimonio.COLUMNA_DENOMINACION,
+                ContractSql.Patrimonio.COLUMNA_OTRASDENOMINACIONES,
+                ContractSql.Patrimonio.COLUMNA_CODTIPO,
+                ContractSql.Patrimonio.COLUMNA_CODPADRE,
+                ContractSql.Patrimonio.COLUMNA_DESCRIPCION};
 
 
 // How you want the results sorted in the resulting Cursor
@@ -134,22 +146,19 @@ public class MainActivity extends AppCompatActivity
         while (cursor.moveToNext()) {
             String denominacion = cursor.getString(
                     cursor.getColumnIndexOrThrow(ContractSql.Patrimonio.COLUMNA_DENOMINACION));
+            String otraDenominacion = cursor.getString(
+                    cursor.getColumnIndexOrThrow(ContractSql.Patrimonio.COLUMNA_OTRASDENOMINACIONES));
+            String descripccion = cursor.getString(
+                    cursor.getColumnIndexOrThrow(ContractSql.Patrimonio.COLUMNA_DESCRIPCION));
+
+
+            PatrimonioDescripcionResumen descripcionResumen = new PatrimonioDescripcionResumen(otraDenominacion,null,null,descripccion);
             PatrimonioResumen patrimonioResumen = new PatrimonioResumen(1000, denominacion, R.drawable.complutum);//imagen 300*100
+            patrimonioResumen.setDescripcion(descripcionResumen);
             patrimonios.add(patrimonioResumen);
         }
         cursor.close();
-//
-//        PatrimonioResumen patrimonioResumen1 = new PatrimonioResumen(2000,"La Alhambra",R.drawable.alhambra);
-//        patrimonios.add(patrimonioResumen1);
-//
-//        PatrimonioResumen patrimonioResumen2 = new PatrimonioResumen(3000,"Merida",R.drawable.merida);
-//        patrimonios.add(patrimonioResumen2);
-//
-//        PatrimonioResumen patrimonioResumen3 = new PatrimonioResumen(4000,"Carranque",R.drawable.carranque);
-//        patrimonios.add(patrimonioResumen3);
-//
-//        PatrimonioResumen patrimonioResumen4 = new PatrimonioResumen(5000,"Roma",R.drawable.roma);
-//        patrimonios.add(patrimonioResumen4);
+
 
         cardViewAdapter.notifyDataSetChanged();
     }

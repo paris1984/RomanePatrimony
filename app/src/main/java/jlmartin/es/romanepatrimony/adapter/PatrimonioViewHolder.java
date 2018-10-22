@@ -36,11 +36,11 @@ public class PatrimonioViewHolder extends RecyclerView.ViewHolder implements Vie
 
     @Override
     public void onClick(View v) {
-        System.out.print("Clicado: "+patrimonios.get(getAdapterPosition()).getId());
-        //Intent intent=null;
-        //context.startActivity(intent);
+
         DialogFragmentDetail dialogFragmentDetail = new DialogFragmentDetail();
         dialogFragmentDetail.setContext(context);
+        dialogFragmentDetail.setPatrimonios(patrimonios);
+        dialogFragmentDetail.setIndice(getAdapterPosition());
         dialogFragmentDetail.showDialog();
 
 

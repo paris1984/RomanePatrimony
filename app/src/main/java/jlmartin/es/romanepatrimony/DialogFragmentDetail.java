@@ -11,19 +11,49 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.TextView;
+
+import java.util.List;
+
+import jlmartin.es.romanepatrimony.entidad.PatrimonioResumen;
 
 public class DialogFragmentDetail extends DialogFragment {
-    private Context context;
+    private Activity context;
+    private List<PatrimonioResumen> patrimonios;
+    private int indice;
+
+    private TextView titulo;
+    private TextView otraDen;
+    private TextView descripcion;
 
     public void setContext(Context context) {
-        this.context = context;
+        this.context = (Activity)context;
+    }
+
+    public void setPatrimonios(List<PatrimonioResumen> patrimonios) {
+        this.patrimonios = patrimonios;
+    }
+
+    public void setIndice(int indice) {
+        this.indice = indice;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout to use as dialog or embedded fragment
-        return inflater.inflate(R.layout.detail_patrimony, container, false);
+        View view = inflater.inflate(R.layout.detail_patrimony, container, false);
+
+        //recuperamos los objetos a rellenar de la vista
+        titulo =  view.findViewById(R.id.titulo_tv);
+        otraDen =  view.findViewById(R.id.otradenominacion_tv);
+        descripcion =  view.findViewById(R.id.descripcion_tv);
+
+        //le ponemos los valores necearios
+        titulo.setText(patrimonios.get(indice).getTitulo());
+        otraDen.setText(patrimonios.get(indice).getDescripcion().getOtraDenominacion());
+        descripcion.setText(patrimonios.get(indice).getDescripcion().getDescripcion());
+        return view;
     }
 
     @Override
@@ -38,22 +68,9 @@ public class DialogFragmentDetail extends DialogFragment {
     }
 
     public void showDialog() {
-        Activity activity = (Activity)context;
-        FragmentManager fragmentManager = activity.getFragmentManager();
 
+        FragmentManager fragmentManager = context.getFragmentManager();
+        this.show(fragmentManager, "dialog");
 
-        if (true) {
-            // The device is using a large layout, so show the fragment as a dialog
-            this.show(fragmentManager, "dialog");
-        } else {
-            // The device is smaller, so show the fragment fullscreen
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            // For a little polish, specify a transition animation
-            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            // To make it fullscreen, use the 'content' root view as the container
-            // for the fragment, which is always the root view for the activity
-            transaction.add(android.R.id.content, this)
-                    .addToBackStack(null).commit();
-        }
     }
 }

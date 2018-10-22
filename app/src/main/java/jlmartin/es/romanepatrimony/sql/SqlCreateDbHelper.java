@@ -9,10 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jlmartin.es.romanepatrimony.entidad.Municipio;
+import jlmartin.es.romanepatrimony.entidad.Tipo;
 
-public class MunicipiosSqlCreateDbHelper {
+public class SqlCreateDbHelper {
 
-    public static List<Municipio> creation(InputStream inputStream) {
+    public static List<Municipio> creationMunicipios(InputStream inputStream) {
 
         List<Municipio> municipios = new ArrayList<>();
         try {
@@ -20,13 +21,13 @@ public class MunicipiosSqlCreateDbHelper {
             String linea;
             while ((linea = br.readLine()) != null) {
                 Integer provincia_id = Integer.parseInt(linea.substring(0, linea.indexOf(",")));
-                linea = linea.substring(linea.indexOf(",")+3);
+                linea = linea.substring(linea.indexOf(",") + 3);
                 String nombre = linea.substring(0, linea.indexOf("'"));
-                linea  = linea.substring(linea.lastIndexOf("'")+3);
+                linea = linea.substring(linea.lastIndexOf("'") + 3);
                 String[] coordenadas = linea.split(", ");
                 Double latitud = Double.parseDouble(coordenadas[0]);
                 Double longitud = Double.parseDouble(coordenadas[1]);
-                Municipio municipio = new Municipio(nombre,provincia_id,latitud,longitud);
+                Municipio municipio = new Municipio(nombre, provincia_id, latitud, longitud);
                 municipios.add(municipio);
             }
         } catch (UnsupportedEncodingException e) {
@@ -34,8 +35,20 @@ public class MunicipiosSqlCreateDbHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return  municipios;
+        return municipios;
+    }
 
-
+    public static List<Tipo> creationTipos(InputStream inputStream){
+        List<Tipo> tipos = new ArrayList<>();
+        try{
+            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                tipos.add(new Tipo(linea));
+            }
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        return tipos;
     }
 }
