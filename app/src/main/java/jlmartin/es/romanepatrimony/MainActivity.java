@@ -66,7 +66,9 @@ public class MainActivity extends AppCompatActivity
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 if(!ACTUALIZADO.equals(dataSnapshot.child("version").getValue().toString())){
-                    new ActualizadoDialogFragment().show(getSupportFragmentManager(),"Alerta");
+                    ActualizadoDialogFragment dialog = new ActualizadoDialogFragment();
+                    dialog.setPackageName(getPackageName());
+                    dialog.show(getSupportFragmentManager(),"Alerta");
                 }
 
             }
