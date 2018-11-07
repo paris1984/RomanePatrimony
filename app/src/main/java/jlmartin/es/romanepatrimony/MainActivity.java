@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -13,9 +14,16 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +37,7 @@ import jlmartin.es.romanepatrimony.sql.RomaneDbHelper;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static final String ACTUALIZADO = "actualizado";
     private RecyclerView recyclerView;
     private CardViewAdapter cardViewAdapter;
     private List<PatrimonioResumen> patrimonios = new ArrayList<>();
@@ -39,10 +48,36 @@ public class MainActivity extends AppCompatActivity
     private TextView otraDen;
     private TextView descripcion;
 
+    //firebase
+    private DatabaseReference mDatabase;
+    private ValueEventListener eventListener;
+    private String valor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mDatabase =
+                FirebaseDatabase.getInstance().getReference();
+
+        eventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if(!ACTUALIZADO.equals(dataSnapshot.child("version").getValue().toString())){
+                    new ActualizadoDialogFragment().show(getSupportFragmentManager(),"Alerta");
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("", "Error!", databaseError.toException());
+            }
+        };
+
+        mDatabase.addListenerForSingleValueEvent(eventListener);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -158,7 +193,6 @@ public class MainActivity extends AppCompatActivity
             patrimonios.add(patrimonioResumen);
         }
         cursor.close();
-
 
         cardViewAdapter.notifyDataSetChanged();
     }

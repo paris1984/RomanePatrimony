@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "623382683423",
+    "firebase_url": "https://romanepatrimony.firebaseio.com",
+    "project_id": "romanepatrimony",
+    "storage_bucket": "romanepatrimony.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:623382683423:android:9f19681d646a9da7",
+        "android_client_info": {
+          "package_name": "jlmartin.es.romanepatrimony"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "623382683423-3toeatp568bdd9a9ghauhvdaufibf430.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "jlmartin.es.romanepatrimony",
+            "certificate_hash": "899550ccd5cbdee7b95970fdf8aca606eb8c5ef0"
+          }
+        },
+        {
+          "client_id": "623382683423-seda7q4k1g4a5qouknq6httqt6u076hf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAB-18iZX3NZvbL5S44cauhp0Lu1QYVuBU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "623382683423-seda7q4k1g4a5qouknq6httqt6u076hf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
