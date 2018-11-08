@@ -4,8 +4,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.provider.BaseColumns;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -17,6 +17,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -42,6 +44,8 @@ public class MainActivity extends AppCompatActivity
     private CardViewAdapter cardViewAdapter;
     private List<PatrimonioResumen> patrimonios = new ArrayList<>();
     private SQLiteDatabase db;
+    private ConstraintLayout layoutMain;
+    private LinearLayout linearLayout;
 
     //objetos del detalle
     private TextView titulo;
@@ -53,10 +57,24 @@ public class MainActivity extends AppCompatActivity
     private ValueEventListener eventListener;
     private String valor;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        linearLayout = findViewById(R.id.linearMain);
+        View viewList= getLayoutInflater()
+                .inflate(R.layout.activity_list, layoutMain, false);
+        linearLayout.addView(viewList);
+
+        View viewMap = getLayoutInflater()
+                .inflate(R.layout.activity_maps, layoutMain, false);
+        linearLayout.addView(viewMap);
+
+        linearLayout.getChildAt(1).setVisibility(View.GONE);
+        linearLayout.getChildAt(0).setVisibility(View.VISIBLE);
 
         mDatabase =
                 FirebaseDatabase.getInstance().getReference();
@@ -143,11 +161,14 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        View view=null;
 
         if (id == R.id.nav_inicio) {
-            // Handle the camera action
-        } else if (id == R.id.nav_config) {
-
+            linearLayout.getChildAt(1).setVisibility(View.GONE);
+            linearLayout.getChildAt(0).setVisibility(View.VISIBLE);
+        } else if (id == R.id.nav_maps) {
+            linearLayout.getChildAt(1).setVisibility(View.VISIBLE);
+            linearLayout.getChildAt(0).setVisibility(View.GONE);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

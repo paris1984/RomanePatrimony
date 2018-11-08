@@ -6,13 +6,13 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".MainActivity"
+    android:id="@+id/principal"
     tools:showIn="@layout/app_bar_main">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/patrimonios"
+
+    <LinearLayout
+        android:id="@+id/linearMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical">
-
-    </android.support.v7.widget.RecyclerView>
+        android:orientation="vertical"></LinearLayout>
 </android.support.constraint.ConstraintLayout>
