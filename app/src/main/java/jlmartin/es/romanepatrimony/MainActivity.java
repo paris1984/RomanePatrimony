@@ -21,6 +21,13 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,9 +44,11 @@ import jlmartin.es.romanepatrimony.sql.ContractSql;
 import jlmartin.es.romanepatrimony.sql.RomaneDbHelper;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback {
 
     public static final String ACTUALIZADO = "actualizado";
+
+    private static final LatLng CENTER = new LatLng(40, -4);
     private RecyclerView recyclerView;
     private CardViewAdapter cardViewAdapter;
     private List<PatrimonioResumen> patrimonios = new ArrayList<>();
@@ -56,7 +65,7 @@ public class MainActivity extends AppCompatActivity
     private DatabaseReference mDatabase;
     private ValueEventListener eventListener;
     private String valor;
-
+    private GoogleMap map;
 
 
     @Override
@@ -72,6 +81,10 @@ public class MainActivity extends AppCompatActivity
         View viewMap = getLayoutInflater()
                 .inflate(R.layout.activity_maps, layoutMain, false);
         linearLayout.addView(viewMap);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
         linearLayout.getChildAt(1).setVisibility(View.GONE);
         linearLayout.getChildAt(0).setVisibility(View.VISIBLE);
@@ -218,5 +231,15 @@ public class MainActivity extends AppCompatActivity
         cursor.close();
 
         cardViewAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+
+        // Add a marker in Sydney and move the camera
+        LatLng espana = new LatLng(40, -4);
+        map.addMarker(new MarkerOptions().position(CENTER).title(""));
+        map.moveCamera(CameraUpdateFactory.newLatLng(espana));
     }
 }
