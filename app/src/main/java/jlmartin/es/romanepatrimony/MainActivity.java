@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(cardViewAdapter);
-        rellenarDatos();
+        rellenarDatosListado();
     }
 
     @Override
@@ -174,14 +174,16 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        View view=null;
 
-        if (id == R.id.nav_inicio) {
-            linearLayout.getChildAt(1).setVisibility(View.GONE);
-            linearLayout.getChildAt(0).setVisibility(View.VISIBLE);
-        } else if (id == R.id.nav_maps) {
-            linearLayout.getChildAt(1).setVisibility(View.VISIBLE);
-            linearLayout.getChildAt(0).setVisibility(View.GONE);
+        switch (id){
+            case R.id.nav_inicio:
+                linearLayout.getChildAt(1).setVisibility(View.GONE);
+                linearLayout.getChildAt(0).setVisibility(View.VISIBLE);
+                break;
+            case R.id.nav_maps:
+                linearLayout.getChildAt(1).setVisibility(View.VISIBLE);
+                linearLayout.getChildAt(0).setVisibility(View.GONE);
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -189,14 +191,15 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void rellenarDatos() {
+    private void rellenarDatosListado() {
 
         String[] projection = {
                 BaseColumns._ID,
                 ContractSql.Patrimonio.COLUMNA_DENOMINACION,
                 ContractSql.Patrimonio.COLUMNA_OTRASDENOMINACIONES,
                 ContractSql.Patrimonio.COLUMNA_CODTIPO,
-                ContractSql.Patrimonio.COLUMNA_CODPADRE,
+                ContractSql.Patrimonio.COLUMNA_CODMUNICIPIO,
+                ContractSql.Patrimonio.COLUMNA_DATOSHISTORICOS,
                 ContractSql.Patrimonio.COLUMNA_DESCRIPCION};
 
 
@@ -221,9 +224,11 @@ public class MainActivity extends AppCompatActivity
                     cursor.getColumnIndexOrThrow(ContractSql.Patrimonio.COLUMNA_OTRASDENOMINACIONES));
             String descripccion = cursor.getString(
                     cursor.getColumnIndexOrThrow(ContractSql.Patrimonio.COLUMNA_DESCRIPCION));
+            String datosHistoricos = cursor.getString(
+                    cursor.getColumnIndexOrThrow(ContractSql.Patrimonio.COLUMNA_DATOSHISTORICOS));
 
 
-            PatrimonioDescripcionResumen descripcionResumen = new PatrimonioDescripcionResumen(otraDenominacion,null,null,descripccion);
+            PatrimonioDescripcionResumen descripcionResumen = new PatrimonioDescripcionResumen(otraDenominacion,null,descripccion,datosHistoricos);
             PatrimonioResumen patrimonioResumen = new PatrimonioResumen(1000, denominacion, R.drawable.complutum);//imagen 300*100
             patrimonioResumen.setDescripcion(descripcionResumen);
             patrimonios.add(patrimonioResumen);

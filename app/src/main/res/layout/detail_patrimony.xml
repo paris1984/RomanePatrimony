@@ -58,13 +58,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/edit_text_border"
-            android:text="Pertenece" />
+            android:text="Municipio" />
     </LinearLayout>
-
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mapView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/descripcion_tv"
@@ -72,13 +67,6 @@
         android:layout_height="wrap_content"
         android:background="@drawable/edit_text_border"
         android:text="Descripcion" />
-
-    <TextView
-        android:id="@+id/bibliografia_tv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/edit_text_border"
-        android:text="Bibliografia" />
 
     <TextView
         android:id="@+id/datos_tv"
