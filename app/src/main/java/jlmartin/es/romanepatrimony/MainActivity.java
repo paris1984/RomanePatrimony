@@ -295,6 +295,6 @@ public class MainActivity extends AppCompatActivity
             map.addMarker(new MarkerOptions().position(latLong).title(posicion.getTitulo()));
         }
 
-        map.moveCamera(CameraUpdateFactory.newLatLng(CENTER));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(CENTER,5));
     }
 }
