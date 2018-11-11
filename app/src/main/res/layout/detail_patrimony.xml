@@ -6,10 +6,9 @@
     android:orientation="vertical">
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="2dp"
     android:orientation="vertical">
 
     <TextView
@@ -29,7 +28,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/edit_text_border"
-        android:text="Otra denominacion" />
+        android:text="Otra denominacion"
+        android:textAlignment="center" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -42,7 +42,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/edit_text_border"
-            android:text="Tipo" />
+            android:text="Tipo"
+            android:textAlignment="center" />
 
         <TextView
             android:id="@+id/municipio"
@@ -50,7 +51,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/edit_text_border"
-            android:text="Municipio" />
+            android:text="Municipio"
+            android:textAlignment="center" />
     </LinearLayout>
 
     <TextView
@@ -58,13 +60,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/edit_text_border"
-        android:text="Descripcion" />
+        android:text="Descripcion"
+        android:textAlignment="center" />
 
     <TextView
         android:id="@+id/datos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/edit_text_border"
-        android:text="Datos historicos" />
+        android:text="Datos historicos"
+        android:textAlignment="center" />
 </LinearLayout>
 </ScrollView>
