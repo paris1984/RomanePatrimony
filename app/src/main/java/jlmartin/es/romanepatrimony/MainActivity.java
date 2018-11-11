@@ -40,12 +40,13 @@ import java.util.List;
 
 import jlmartin.es.romanepatrimony.adapter.CardViewAdapter;
 import jlmartin.es.romanepatrimony.domain.PatrimonioDetallado;
+import jlmartin.es.romanepatrimony.domain.PatrimonioPosicion;
 import jlmartin.es.romanepatrimony.domain.PatrimonioResumen;
 import jlmartin.es.romanepatrimony.sql.ContractSql;
 import jlmartin.es.romanepatrimony.sql.RomaneDbHelper;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback {
+        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
     //CONSTANTES
     private static final String ACTUALIZADO = "actualizado";
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity
     private LinearLayout linearLayout;
     //datos
     private List<PatrimonioResumen> patrimonios = new ArrayList<>();
+    private List<PatrimonioPosicion> posiciones = new ArrayList<>();
 
     //firebase
     private DatabaseReference mDatabase;
@@ -71,7 +73,7 @@ public class MainActivity extends AppCompatActivity
 
         //pintamos la vista principal
         linearLayout = findViewById(R.id.linearMain);
-        View viewList= getLayoutInflater()
+        View viewList = getLayoutInflater()
                 .inflate(R.layout.activity_list, null, false);
         linearLayout.addView(viewList);
 
@@ -94,10 +96,10 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if(!ACTUALIZADO.equals(dataSnapshot.child("version").getValue().toString())){
+                if (!ACTUALIZADO.equals(dataSnapshot.child("version").getValue().toString())) {
                     ActualizadoDialogFragment dialog = new ActualizadoDialogFragment();
                     dialog.setPackageName(getPackageName());
-                    dialog.show(getSupportFragmentManager(),"Alerta");
+                    dialog.show(getSupportFragmentManager(), "Alerta");
                 }
 
             }
@@ -173,7 +175,7 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        switch (id){
+        switch (id) {
             case R.id.nav_inicio:
                 linearLayout.getChildAt(1).setVisibility(View.GONE);
                 linearLayout.getChildAt(0).setVisibility(View.VISIBLE);
@@ -191,7 +193,7 @@ public class MainActivity extends AppCompatActivity
 
     private void rellenarDatosListado() {
         //columnas que queremos sacar de sqlite
-        String[] projection = {
+        String[] projectionPatrimonio = {
                 BaseColumns._ID,
                 ContractSql.Patrimonio.COLUMNA_DENOMINACION,
                 ContractSql.Patrimonio.COLUMNA_OTRASDENOMINACIONES,
@@ -205,7 +207,7 @@ public class MainActivity extends AppCompatActivity
         //preparamos la query
         Cursor cursor = db.query(
                 ContractSql.Patrimonio.TABLA,
-                projection,
+                projectionPatrimonio,
                 null,
                 null,
                 null,
@@ -223,13 +225,52 @@ public class MainActivity extends AppCompatActivity
                     cursor.getColumnIndexOrThrow(ContractSql.Patrimonio.COLUMNA_DESCRIPCION));
             String datosHistoricos = cursor.getString(
                     cursor.getColumnIndexOrThrow(ContractSql.Patrimonio.COLUMNA_DATOSHISTORICOS));
+            int tipo = cursor.getInt(
+                    cursor.getColumnIndexOrThrow(ContractSql.Patrimonio.COLUMNA_CODTIPO));
+            int municipio = cursor.getInt(
+                    cursor.getColumnIndexOrThrow(ContractSql.Patrimonio.COLUMNA_CODMUNICIPIO));
 
+            String[] projectionTipo = {ContractSql.Tipo.COLUMNA_DESCRIPCION};
+            String[] argsTipo = new String[]{String.valueOf(tipo)};
+            Cursor cursorTipo = db.query(
+                    ContractSql.Tipo.TABLA,
+                    projectionTipo,
+                    ContractSql.Tipo._ID + "=?",
+                    argsTipo,
+                    null,
+                    null,
+                    null
+            );
+            String tipoDes=null;
+            while (cursorTipo.moveToNext()) {
+                tipoDes = cursorTipo.getString(0);
+            }
 
-            PatrimonioDetallado descripcionResumen = new PatrimonioDetallado(otraDenominacion,null,descripccion,datosHistoricos);
+            String[] projectionMunicipio = {ContractSql.Municipio.COLUMNA_NOMBRE,ContractSql.Municipio.COLUMNA_LATITUD,ContractSql.Municipio.COLUMNA_LONGITUD};
+            String[] argsMunic = new String[]{String.valueOf(municipio)};
+            Cursor cursorMunic = db.query(
+                    ContractSql.Municipio.TABLA,
+                    projectionMunicipio,
+                    ContractSql.Municipio._ID + "=?",
+                    argsMunic,
+                    null,
+                    null,
+                    null
+            );
+            String municDes=null;
+            Double latitud=null;
+            Double longitud=null;
+            while (cursorMunic.moveToNext()) {
+                municDes = cursorMunic.getString(0);
+                latitud = cursorMunic.getDouble(1);
+                longitud = cursorMunic.getDouble(2);
+            }
+
+            PatrimonioDetallado descripcionResumen = new PatrimonioDetallado(otraDenominacion, tipoDes, descripccion, datosHistoricos,municDes);
 
             InputStream imagen = null;
             try {
-                imagen = assetManager.open(otraDenominacion+".png");
+                imagen = assetManager.open(otraDenominacion + ".png");
             } catch (IOException e) {
                 System.err.print("Error al buscar la imagen");
             }
@@ -237,6 +278,8 @@ public class MainActivity extends AppCompatActivity
             PatrimonioResumen patrimonioResumen = new PatrimonioResumen(denominacion, imagen);//imagen 300*100
             patrimonioResumen.setDescripcion(descripcionResumen);
             patrimonios.add(patrimonioResumen);
+
+            posiciones.add(new PatrimonioPosicion(denominacion,latitud,longitud));
         }
         cursor.close();
 
@@ -247,9 +290,11 @@ public class MainActivity extends AppCompatActivity
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng espana = new LatLng(41, -4);
-        map.addMarker(new MarkerOptions().position(CENTER).title(""));
-        map.moveCamera(CameraUpdateFactory.newLatLng(espana));
+        for(PatrimonioPosicion posicion:posiciones){
+            LatLng latLong = new LatLng(posicion.getLatitud(),posicion.getLongitud());
+            map.addMarker(new MarkerOptions().position(latLong).title(posicion.getTitulo()));
+        }
+
+        map.moveCamera(CameraUpdateFactory.newLatLng(CENTER));
     }
 }

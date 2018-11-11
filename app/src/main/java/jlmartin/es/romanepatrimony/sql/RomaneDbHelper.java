@@ -38,7 +38,7 @@ public class RomaneDbHelper extends SQLiteOpenHelper {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(ContractSql.SQL_CREATE_ACTIVIDAD);
         db.execSQL(ContractSql.SQL_CREATE_TIPO);
@@ -88,7 +88,7 @@ public class RomaneDbHelper extends SQLiteOpenHelper {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(ContractSql.SQL_DELETE_PATRIMONIO);
         db.execSQL(ContractSql.SQL_DELETE_ACTIVIDAD);
@@ -97,7 +97,6 @@ public class RomaneDbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
     }

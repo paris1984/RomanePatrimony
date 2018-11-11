@@ -25,6 +25,8 @@ public class DialogFragmentDetail extends DialogFragment {
     private TextView otraDen;
     private TextView descripcion;
     private TextView datosHistoricos;
+    private TextView tipo;
+    private TextView municipio;
 
     public void setContext(Context context) {
         this.context = (Activity)context;
@@ -49,12 +51,17 @@ public class DialogFragmentDetail extends DialogFragment {
         otraDen =  view.findViewById(R.id.otradenominacion);
         descripcion =  view.findViewById(R.id.descripcion);
         datosHistoricos =  view.findViewById(R.id.datos);
+        tipo = view.findViewById(R.id.tipo);
+        municipio = view.findViewById(R.id.municipio);
 
         //le ponemos los valores necearios
         titulo.setText(patrimonios.get(indice).getTitulo());
         otraDen.setText(patrimonios.get(indice).getDescripcion().getOtraDenominacion());
         descripcion.setText(patrimonios.get(indice).getDescripcion().getDescripcion());
         datosHistoricos.setText(patrimonios.get(indice).getDescripcion().getDatosHistoricos());
+        tipo.setText(patrimonios.get(indice).getDescripcion().getTipo());
+        municipio.setText(patrimonios.get(indice).getDescripcion().getMunicipio());
+
         return view;
     }
 
