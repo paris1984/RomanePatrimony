@@ -1,10 +1,10 @@
 package jlmartin.es.romanepatrimony;
 
+import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.provider.BaseColumns;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -19,7 +19,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -34,37 +33,34 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import jlmartin.es.romanepatrimony.adapter.CardViewAdapter;
-import jlmartin.es.romanepatrimony.entidad.PatrimonioDescripcionResumen;
-import jlmartin.es.romanepatrimony.entidad.PatrimonioResumen;
+import jlmartin.es.romanepatrimony.domain.PatrimonioDetallado;
+import jlmartin.es.romanepatrimony.domain.PatrimonioResumen;
 import jlmartin.es.romanepatrimony.sql.ContractSql;
 import jlmartin.es.romanepatrimony.sql.RomaneDbHelper;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback {
 
-    public static final String ACTUALIZADO = "actualizado";
-
+    //CONSTANTES
+    private static final String ACTUALIZADO = "actualizado";
     private static final LatLng CENTER = new LatLng(40, -4);
+    //objetos de android
     private RecyclerView recyclerView;
     private CardViewAdapter cardViewAdapter;
-    private List<PatrimonioResumen> patrimonios = new ArrayList<>();
     private SQLiteDatabase db;
-    private ConstraintLayout layoutMain;
     private LinearLayout linearLayout;
-
-    //objetos del detalle
-    private TextView titulo;
-    private TextView otraDen;
-    private TextView descripcion;
+    //datos
+    private List<PatrimonioResumen> patrimonios = new ArrayList<>();
 
     //firebase
     private DatabaseReference mDatabase;
     private ValueEventListener eventListener;
-    private String valor;
     private GoogleMap map;
 
 
@@ -73,13 +69,14 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //pintamos la vista principal
         linearLayout = findViewById(R.id.linearMain);
         View viewList= getLayoutInflater()
-                .inflate(R.layout.activity_list, layoutMain, false);
+                .inflate(R.layout.activity_list, null, false);
         linearLayout.addView(viewList);
 
         View viewMap = getLayoutInflater()
-                .inflate(R.layout.activity_maps, layoutMain, false);
+                .inflate(R.layout.activity_maps, null, false);
         linearLayout.addView(viewMap);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -89,6 +86,7 @@ public class MainActivity extends AppCompatActivity
         linearLayout.getChildAt(1).setVisibility(View.GONE);
         linearLayout.getChildAt(0).setVisibility(View.VISIBLE);
 
+        //recuperamos valor de firebase
         mDatabase =
                 FirebaseDatabase.getInstance().getReference();
 
@@ -124,9 +122,9 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        //lanzamos base de datos sqlite
         RomaneDbHelper helper = new RomaneDbHelper(this);
         db = helper.getReadableDatabase();
-
 
         recyclerView = findViewById(R.id.patrimonios);
         cardViewAdapter = new CardViewAdapter(patrimonios);
@@ -192,7 +190,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void rellenarDatosListado() {
-
+        //columnas que queremos sacar de sqlite
         String[] projection = {
                 BaseColumns._ID,
                 ContractSql.Patrimonio.COLUMNA_DENOMINACION,
@@ -201,22 +199,21 @@ public class MainActivity extends AppCompatActivity
                 ContractSql.Patrimonio.COLUMNA_CODMUNICIPIO,
                 ContractSql.Patrimonio.COLUMNA_DATOSHISTORICOS,
                 ContractSql.Patrimonio.COLUMNA_DESCRIPCION};
-
-
-// How you want the results sorted in the resulting Cursor
+        //ordenacion que queremos
         String sortOrder =
-                ContractSql.Patrimonio.COLUMNA_DENOMINACION + " DESC";
-
+                ContractSql.Patrimonio.COLUMNA_DENOMINACION + " ASC";
+        //preparamos la query
         Cursor cursor = db.query(
-                ContractSql.Patrimonio.TABLA,   // The table to query
-                projection,             // The array of columns to return (pass null to get all)
-                null,              // The columns for the WHERE clause
-                null,          // The values for the WHERE clause
-                null,                   // don't group the rows
-                null,                   // don't filter by row groups
-                sortOrder               // The sort order
+                ContractSql.Patrimonio.TABLA,
+                projection,
+                null,
+                null,
+                null,
+                null,
+                sortOrder
         );
-
+        AssetManager assetManager = getAssets();
+        //recorremos la busqueda
         while (cursor.moveToNext()) {
             String denominacion = cursor.getString(
                     cursor.getColumnIndexOrThrow(ContractSql.Patrimonio.COLUMNA_DENOMINACION));
@@ -228,8 +225,16 @@ public class MainActivity extends AppCompatActivity
                     cursor.getColumnIndexOrThrow(ContractSql.Patrimonio.COLUMNA_DATOSHISTORICOS));
 
 
-            PatrimonioDescripcionResumen descripcionResumen = new PatrimonioDescripcionResumen(otraDenominacion,null,descripccion,datosHistoricos);
-            PatrimonioResumen patrimonioResumen = new PatrimonioResumen(1000, denominacion, R.drawable.complutum);//imagen 300*100
+            PatrimonioDetallado descripcionResumen = new PatrimonioDetallado(otraDenominacion,null,descripccion,datosHistoricos);
+
+            InputStream imagen = null;
+            try {
+                imagen = assetManager.open(otraDenominacion+".png");
+            } catch (IOException e) {
+                System.err.print("Error al buscar la imagen");
+            }
+
+            PatrimonioResumen patrimonioResumen = new PatrimonioResumen(denominacion, imagen);//imagen 300*100
             patrimonioResumen.setDescripcion(descripcionResumen);
             patrimonios.add(patrimonioResumen);
         }

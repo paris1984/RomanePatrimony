@@ -2,19 +2,23 @@ package jlmartin.es.romanepatrimony.sql;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import jlmartin.es.romanepatrimony.R;
-import jlmartin.es.romanepatrimony.entidad.Municipio;
-import jlmartin.es.romanepatrimony.entidad.Patrimonio;
-import jlmartin.es.romanepatrimony.entidad.Tipo;
+import jlmartin.es.romanepatrimony.entity.Municipio;
+import jlmartin.es.romanepatrimony.entity.Patrimonio;
+import jlmartin.es.romanepatrimony.entity.Tipo;
 
 public class RomaneDbHelper extends SQLiteOpenHelper {
 
@@ -37,29 +41,24 @@ public class RomaneDbHelper extends SQLiteOpenHelper {
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(ContractSql.SQL_CREATE_ACTIVIDAD);
-        db.execSQL(ContractSql.SQL_CREATE_PERIODO_HISTORICO);
         db.execSQL(ContractSql.SQL_CREATE_TIPO);
         db.execSQL(ContractSql.SQL_CREATE_MUNICIPIO);
         db.execSQL(ContractSql.SQL_CREATE_PATRIMONIO);
-        db.execSQL(ContractSql.SQL_CREATE_TIPOLOGIA_PATRIMONIO);
 
         //datos municipios
-        List<Municipio> municipios = SqlCreateDbHelper.creationMunicipios(inputStreamMunicipios);
-        int count=0;
+        List<Municipio> municipios = CreateEntity.creationMunicipios(inputStreamMunicipios);
         for (Municipio municipio:municipios) {
             ContentValues municipio1 = new ContentValues();
             municipio1.put(ContractSql.Municipio.COLUMNA_NOMBRE,municipio.getNombre());
             municipio1.put(ContractSql.Municipio.COLUMNA_PROVINCIA_ID,municipio.getProvincia_id());
             municipio1.put(ContractSql.Municipio.COLUMNA_LATITUD,municipio.getLatitud());
             municipio1.put(ContractSql.Municipio.COLUMNA_LONGITUD,municipio.getLongitud());
-            if(municipio.setId(db.insert(ContractSql.Municipio.TABLA, null, municipio1))!=-1){
-                count++;
-            }else{
+            if(municipio.setId(db.insert(ContractSql.Municipio.TABLA, null, municipio1))==-1){
                 System.err.println("Error al insertar:"+municipio);
             }
         }
         // datos tipos
-        List<Tipo> tipos = SqlCreateDbHelper.creationTipos(inputStreamTipos);
+        List<Tipo> tipos = CreateEntity.creationTipos(inputStreamTipos);
         for(Tipo tipo:tipos){
             ContentValues tipos1 = new ContentValues();
             tipos1.put(ContractSql.Tipo.COLUMNA_DESCRIPCION, tipo.getDescripcion());
@@ -68,7 +67,7 @@ public class RomaneDbHelper extends SQLiteOpenHelper {
         }
 
         // datos patrimonio
-        List<Patrimonio> patrimonios = SqlCreateDbHelper.creationPatrimonios(inputStreamPatrimonios);
+        List<Patrimonio> patrimonios = CreateEntity.creationPatrimonios(inputStreamPatrimonios);
 
         for (Patrimonio patrimonio:patrimonios) {
             ContentValues patrimonios1 = new ContentValues();
@@ -82,7 +81,6 @@ public class RomaneDbHelper extends SQLiteOpenHelper {
             patrimonios1.put(ContractSql.Patrimonio.COLUMNA_DESCRIPCION, patrimonio.getDescripcion());
             patrimonios1.put(ContractSql.Patrimonio.COLUMNA_OTRASDENOMINACIONES,patrimonio.getOtraDenominacion());
             patrimonios1.put(ContractSql.Patrimonio.COLUMNA_DATOSHISTORICOS,patrimonio.getDatosHistoricos());
-
             db.insert(ContractSql.Patrimonio.TABLA, null, patrimonios1);
 
             patrimonio.setMunicipioNum(municipioNum);
@@ -92,10 +90,8 @@ public class RomaneDbHelper extends SQLiteOpenHelper {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(ContractSql.SQL_DELETE_TIPOLOGIA_PATRIMONIO);
         db.execSQL(ContractSql.SQL_DELETE_PATRIMONIO);
         db.execSQL(ContractSql.SQL_DELETE_ACTIVIDAD);
-        db.execSQL(ContractSql.SQL_DELETE_PERIODO_HISTORICO);
         db.execSQL(ContractSql.SQL_DELETE_TIPO);
         db.execSQL(ContractSql.SQL_DELETE_MUNICIPIO);
         onCreate(db);

@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-import jlmartin.es.romanepatrimony.entidad.Municipio;
-import jlmartin.es.romanepatrimony.sql.SqlCreateDbHelper;
+import jlmartin.es.romanepatrimony.entity.Municipio;
+import jlmartin.es.romanepatrimony.sql.CreateEntity;
 
 public class MunicipiosSqlCreateDbHelperTest {
 
@@ -18,7 +18,7 @@ public class MunicipiosSqlCreateDbHelperTest {
 
 
         InputStream input = new FileInputStream("src\\test\\java\\jlmartin\\es\\romanepatrimony\\data_municipios.dat");
-        List<Municipio> municipios = SqlCreateDbHelper.creationMunicipios(input);
+        List<Municipio> municipios = CreateEntity.creationMunicipios(input);
         Assert.assertNotNull(municipios);
         Assert.assertFalse(municipios.isEmpty());
         for(Municipio municipio:municipios){

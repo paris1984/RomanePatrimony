@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,7 +14,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import jlmartin.es.romanepatrimony.entidad.PatrimonioResumen;
+import jlmartin.es.romanepatrimony.domain.PatrimonioResumen;
 
 public class DialogFragmentDetail extends DialogFragment {
     private Activity context;
@@ -46,10 +45,10 @@ public class DialogFragmentDetail extends DialogFragment {
         View view = inflater.inflate(R.layout.detail_patrimony, container, false);
 
         //recuperamos los objetos a rellenar de la vista
-        titulo =  view.findViewById(R.id.titulo_tv);
-        otraDen =  view.findViewById(R.id.otradenominacion_tv);
-        descripcion =  view.findViewById(R.id.descripcion_tv);
-        datosHistoricos =  view.findViewById(R.id.datos_tv);
+        titulo =  view.findViewById(R.id.titulo);
+        otraDen =  view.findViewById(R.id.otradenominacion);
+        descripcion =  view.findViewById(R.id.descripcion);
+        datosHistoricos =  view.findViewById(R.id.datos);
 
         //le ponemos los valores necearios
         titulo.setText(patrimonios.get(indice).getTitulo());

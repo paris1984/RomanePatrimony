@@ -1,12 +1,12 @@
-package jlmartin.es.romanepatrimony.entidad;
+package jlmartin.es.romanepatrimony.domain;
 
-public class PatrimonioDescripcionResumen {
+public class PatrimonioDetallado {
     private String otraDenominacion;
     private String tipo;
     private String descripcion;
     private String datosHistoricos;
 
-    public PatrimonioDescripcionResumen(String otraDenominacion, String tipo, String descripcion,String datosHistoricos) {
+    public PatrimonioDetallado(String otraDenominacion, String tipo, String descripcion, String datosHistoricos) {
         this.otraDenominacion = otraDenominacion;
         this.tipo = tipo;
 

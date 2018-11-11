@@ -1,4 +1,4 @@
-package jlmartin.es.romanepatrimony.entidad;
+package jlmartin.es.romanepatrimony.entity;
 
 public class Patrimonio {
     private int id;

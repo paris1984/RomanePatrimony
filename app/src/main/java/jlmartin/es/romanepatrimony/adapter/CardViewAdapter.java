@@ -1,5 +1,7 @@
 package jlmartin.es.romanepatrimony.adapter;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,7 +11,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import jlmartin.es.romanepatrimony.R;
-import jlmartin.es.romanepatrimony.entidad.PatrimonioResumen;
+import jlmartin.es.romanepatrimony.domain.PatrimonioResumen;
 
 public class CardViewAdapter extends RecyclerView.Adapter<PatrimonioViewHolder> {
 
@@ -31,7 +33,10 @@ public class CardViewAdapter extends RecyclerView.Adapter<PatrimonioViewHolder> 
     public void onBindViewHolder(@NonNull PatrimonioViewHolder holder, int position) {
         PatrimonioResumen patrimonio = patrimonios.get(position);
         holder.titulo.setText(patrimonio.getTitulo());
-        holder.imagen.setImageResource(patrimonio.getImagen());
+        if(patrimonio.getImagen()!=null) {
+            Bitmap bitmap = BitmapFactory.decodeStream(patrimonio.getImagen());
+            holder.imagen.setImageBitmap(bitmap);
+        }
     }
 
     @Override

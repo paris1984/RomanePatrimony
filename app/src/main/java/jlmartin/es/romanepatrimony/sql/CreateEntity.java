@@ -6,14 +6,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import jlmartin.es.romanepatrimony.entidad.Municipio;
-import jlmartin.es.romanepatrimony.entidad.Patrimonio;
-import jlmartin.es.romanepatrimony.entidad.Tipo;
+import jlmartin.es.romanepatrimony.entity.Municipio;
+import jlmartin.es.romanepatrimony.entity.Patrimonio;
+import jlmartin.es.romanepatrimony.entity.Tipo;
 
-public class SqlCreateDbHelper {
+public class CreateEntity {
 
     public static final String SEPARADOR_COLUMNAS = ",";
     public static final String SEPARADOR_CAMPOS = "'";

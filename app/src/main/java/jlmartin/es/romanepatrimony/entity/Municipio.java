@@ -1,4 +1,4 @@
-package jlmartin.es.romanepatrimony.entidad;
+package jlmartin.es.romanepatrimony.entity;
 
 public class Municipio {
     private Long id;

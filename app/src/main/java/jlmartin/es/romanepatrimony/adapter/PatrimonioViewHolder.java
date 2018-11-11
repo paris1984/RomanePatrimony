@@ -1,7 +1,6 @@
 package jlmartin.es.romanepatrimony.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -12,7 +11,7 @@ import java.util.List;
 
 import jlmartin.es.romanepatrimony.DialogFragmentDetail;
 import jlmartin.es.romanepatrimony.R;
-import jlmartin.es.romanepatrimony.entidad.PatrimonioResumen;
+import jlmartin.es.romanepatrimony.domain.PatrimonioResumen;
 
 public class PatrimonioViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 

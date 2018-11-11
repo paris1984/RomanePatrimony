@@ -1,19 +1,21 @@
-package jlmartin.es.romanepatrimony.entidad;
+package jlmartin.es.romanepatrimony.entity;
 
-public class Actividad {
-    private int id;
+public class Tipo {
+    private long id;
     private String descripcion;
 
-    public Actividad(int id, String descripcion) {
-        this.id = id;
+    public Tipo() {
+    }
+
+    public Tipo(String descripcion) {
         this.descripcion = descripcion;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
