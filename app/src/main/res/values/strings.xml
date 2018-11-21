@@ -10,4 +10,7 @@
     <string name="actualizar">Actualizar</string>
     <string name="noactualizar">Seguir de todos modos</string>
     <string name="title_activity_maps">Map</string>
+    <string name="mensaje">Aplicación realizada por Jose Luis Martin Rodriguez</string>
+    <string name="title">Creador</string>
+    <string name="Ok">OK</string>
 </resources>
