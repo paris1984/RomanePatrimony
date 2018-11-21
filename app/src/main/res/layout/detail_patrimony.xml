@@ -70,5 +70,11 @@
         android:background="@drawable/edit_text_border"
         android:text="Datos historicos"
         android:textAlignment="center" />
+
+    <Button
+        android:id="@+id/cerrar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cerrar" />
 </LinearLayout>
 </ScrollView>

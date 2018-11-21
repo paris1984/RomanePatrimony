@@ -48,8 +48,9 @@ import jlmartin.es.romanepatrimony.sql.RomaneDbHelper;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
+
     //CONSTANTES
-    private static final String ACTUALIZADO = "actualizado";
+    private static final String VERSION = "1.0";
     private static final LatLng CENTER = new LatLng(40, -4);
     //objetos de android
     private RecyclerView recyclerView;
@@ -96,7 +97,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if (!ACTUALIZADO.equals(dataSnapshot.child("version").getValue().toString())) {
+                if (!VERSION.equals(dataSnapshot.child("version").getValue().toString())) {
                     ActualizadoDialogFragment dialog = new ActualizadoDialogFragment();
                     dialog.setPackageName(getPackageName());
                     dialog.show(getSupportFragmentManager(), "Alerta");

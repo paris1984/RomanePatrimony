@@ -6,10 +6,6 @@ public class ContractSql {
     public ContractSql(){
 
     }
-    public static class Actividad implements BaseColumns {
-        public static final String TABLA = "actividad";
-        public static final String COLUMNA_DESCRIPCION = "descripcion";
-    }
 
     public static class Tipo implements BaseColumns {
         public static final String TABLA = "tipo";
@@ -35,15 +31,6 @@ public class ContractSql {
         public static final String COLUMNA_CODMUNICIPIO = "cod_municipio";
         public static final String COLUMNA_CODPADRE = "cod_padre";
     }
-
-    //ACTIVIDAD
-    public static final String SQL_CREATE_ACTIVIDAD =
-            "CREATE TABLE " + ContractSql.Actividad.TABLA + " (" +
-                    ContractSql.Actividad._ID + " INTEGER PRIMARY KEY," +
-                    ContractSql.Actividad.COLUMNA_DESCRIPCION + " TEXT)";
-
-    public static final String SQL_DELETE_ACTIVIDAD =
-            "DROP TABLE IF EXISTS " + ContractSql.Actividad.TABLA;
 
     //TIPO
     public static final String SQL_CREATE_TIPO =

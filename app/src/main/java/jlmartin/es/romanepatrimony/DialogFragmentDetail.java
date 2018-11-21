@@ -10,13 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.List;
 
 import jlmartin.es.romanepatrimony.domain.PatrimonioResumen;
 
-public class DialogFragmentDetail extends DialogFragment {
+public class DialogFragmentDetail extends DialogFragment implements View.OnClickListener {
     private Activity context;
     private List<PatrimonioResumen> patrimonios;
     private int indice;
@@ -27,6 +28,7 @@ public class DialogFragmentDetail extends DialogFragment {
     private TextView datosHistoricos;
     private TextView tipo;
     private TextView municipio;
+    private Button cerrar;
 
     public void setContext(Context context) {
         this.context = (Activity)context;
@@ -53,6 +55,8 @@ public class DialogFragmentDetail extends DialogFragment {
         datosHistoricos =  view.findViewById(R.id.datos);
         tipo = view.findViewById(R.id.tipo);
         municipio = view.findViewById(R.id.municipio);
+        cerrar = view.findViewById(R.id.cerrar);
+        cerrar.setOnClickListener(this);
 
         //le ponemos los valores necearios
         titulo.setText(patrimonios.get(indice).getTitulo());
@@ -81,5 +85,10 @@ public class DialogFragmentDetail extends DialogFragment {
         FragmentManager fragmentManager = context.getFragmentManager();
         this.show(fragmentManager, "dialog");
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        this.dismiss();
     }
 }

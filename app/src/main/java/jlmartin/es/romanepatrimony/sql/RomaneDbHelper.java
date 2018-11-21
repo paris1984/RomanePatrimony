@@ -40,7 +40,6 @@ public class RomaneDbHelper extends SQLiteOpenHelper {
 
 
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(ContractSql.SQL_CREATE_ACTIVIDAD);
         db.execSQL(ContractSql.SQL_CREATE_TIPO);
         db.execSQL(ContractSql.SQL_CREATE_MUNICIPIO);
         db.execSQL(ContractSql.SQL_CREATE_PATRIMONIO);
@@ -91,7 +90,6 @@ public class RomaneDbHelper extends SQLiteOpenHelper {
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(ContractSql.SQL_DELETE_PATRIMONIO);
-        db.execSQL(ContractSql.SQL_DELETE_ACTIVIDAD);
         db.execSQL(ContractSql.SQL_DELETE_TIPO);
         db.execSQL(ContractSql.SQL_DELETE_MUNICIPIO);
         onCreate(db);
