@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import jlmartin.es.romanepatrimony.DialogFragmentDetail;
 import jlmartin.es.romanepatrimony.R;
 import jlmartin.es.romanepatrimony.domain.PatrimonioResumen;
 
@@ -35,13 +34,6 @@ public class PatrimonioViewHolder extends RecyclerView.ViewHolder implements Vie
 
     @Override
     public void onClick(View v) {
-
-        DialogFragmentDetail dialogFragmentDetail = new DialogFragmentDetail();
-        dialogFragmentDetail.setContext(context);
-        dialogFragmentDetail.setPatrimonios(patrimonios);
-        dialogFragmentDetail.setIndice(getAdapterPosition());
-        dialogFragmentDetail.showDialog();
-
 
     }
 }
